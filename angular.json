@@ -124,5 +124,8 @@
       }
     }
   },
-  "defaultProject": "angular-stock-treemap"
+  "defaultProject": "angular-stock-treemap",
+  "cli": {
+    "analytics": false
+  }
 }

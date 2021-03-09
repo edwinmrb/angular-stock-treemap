@@ -1,0 +1,92 @@
+/*
+#my_dataviz {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: auto;
+  position: relative;
+  width: 960px;
+}
+
+form {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.node {
+  border: solid 1px white;
+  font: 10px sans-serif;
+  line-height: 12px;
+  overflow: hidden;
+  position: absolute;
+  text-indent: 2px;
+}
+*/
+
+
+#my_dataviz2 {
+  overflow: hidden;
+  margin: 0;
+  font-size: 12px;
+  font-family: "Helvetica Neue", Helvetica;
+}
+
+svg {
+  overflow: hidden;
+}
+
+rect {
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.chart {
+  display: block;
+  margin: auto;
+}
+
+.parent .label {
+  color: #FFFFFF;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+  -webkit-text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+  -moz-text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.labelbody {
+  background: transparent;
+}
+
+.label {
+  margin: 2px;
+  white-space: pre;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+  -webkit-text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+  -moz-text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.child .label {
+  white-space: pre-wrap;
+  text-align: center;
+  text-overflow: ellipsis;
+}
+
+.cell {
+  font-size: 11px;
+  cursor: pointer
+}
+
+
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  width: auto;
+  height: auto;
+  padding: 5px;
+  font: 12px sans-serif;
+  background: white;
+  border: 5px black;
+  // border-radius: 5px;
+  pointer-events: none;
+  z-index: 1;
+}
