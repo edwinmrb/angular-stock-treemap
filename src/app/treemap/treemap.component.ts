@@ -21,6 +21,10 @@ export class TreemapComponent implements OnInit {
   private linesParentsHoverColor = '#FFE13E';
   private linesChildrenHoverColor = '#ffffff';
 
+
+  private colors = ['#5e4fa2', '#3288bd', '#66c2a5', '#abdda4', '#e6f598', '#ffffbf', '#fee08b', '#fdae61', '#f46d43', '#d53e4f', '#9e0142'];
+  private values = [500, 1000, 3000, 5000, 7000, 10000, 15000, 18000, 2000, 30000];
+
   private root;
   private node;
   private data = {
@@ -411,7 +415,7 @@ export class TreemapComponent implements OnInit {
     this.chartWidth = window.innerWidth - 20;
     this.chartHeight = window.innerHeight / 1.3;
     this.createSvg();
-    this.createLegend();
+    this.drawLegend();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -566,7 +570,34 @@ export class TreemapComponent implements OnInit {
         // @ts-ignore
         .style('fill', (d) => {
           /*  TODO IMPLEMENT COLOR CUSTOM RULES*/
-          return d.value > 6714 ? '#978b76' : '#76978b';
+          /* private colors = ['#5e4fa2', '#3288bd', '#66c2a5', '#abdda4', '#e6f598', '#ffffbf', '#fee08b', '#fdae61', '#f46d43', '#d53e4f', '#9e0142'];
+           private values = [500, 1000, 3000, 5000, 7000, 10000, 15000, 18000, 2000, 30000];*/
+          /* console.log('VALUEE', this.values.slice(0, 1).pop());*/
+
+          if (d.value < 500) {
+            return '#5e4fa2';
+          } else if (d.value < 1000) {
+            return '#3288bd';
+          } else if (d.value < 3000) {
+            return '#66c2a5';
+          } else if (d.value < 5000) {
+            return '#abdda4';
+          } else if (d.value < 7000) {
+            return '#e6f598';
+          } else if (d.value < 10000) {
+            return '#ffffbf';
+          } else if (d.value < 15000) {
+            return '#fee08b';
+          } else if (d.value < 18000) {
+            return '#fdae61';
+          } else if (d.value < 20000) {
+            return '#f46d43';
+          } else if (d.value < 30000) {
+            return '#d53e4f';
+          } else {
+            return '#9e0142';
+          }
+
         })
         .attr('width', (d) => {
           return Math.max(0.01, d.x1 - d.x0);
@@ -602,8 +633,47 @@ export class TreemapComponent implements OnInit {
   }
 
 
-  createLegend(): void {
+  drawLegend(): void {
 
+
+    const legW = 80;
+
+
+    const legend = d3.select('#legend')
+      .append('svg:svg')
+      .attr('width', this.chartWidth)
+      .attr('height', 150)
+      .append('svg:g');
+
+
+    legend.selectAll('rect')
+      .data(this.colors)
+      .enter()
+      .append('rect')
+      .attr('width', legW)
+      .attr('transform', (d, i) => {
+        return 'translate(' + i * legW + ',' + 10 + ')';
+      })
+      .attr('height', 20)
+      // @ts-ignore
+      .style('fill', function(d) {
+        return d;
+      });
+
+    legend.selectAll('text')
+      .data(this.values)
+      .enter()
+      .append('text')
+      .attr('x', (d, i) => {
+        return ((i + 1) * legW) - 10;
+      })
+      .attr('y', 50)
+      .text((d, i) => {
+        console.log(d);
+        return d;
+      })
+      .style('fill', 'black')
+      .style('stroke', 'none');
   }
 
 
