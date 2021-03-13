@@ -15,15 +15,17 @@ export class TreemapComponent implements OnInit {
   private treemap;
   private headerHeight = 28;
 
-  private headerColor = '#555555';
-  private linesParentsColor = '#262931';
+  private toolTipDiv;
+
+  private headerColor = '#262931';
+  private linesParentsColor = '#3e424f';
   private linesChildrenColor = '#262931';
   private linesParentsHoverColor = '#FFE13E';
   private linesChildrenHoverColor = '#ffffff';
 
 
-  private colors = ['#5e4fa2', '#3288bd', '#66c2a5', '#abdda4', '#e6f598', '#ffffbf', '#fee08b', '#fdae61', '#f46d43', '#d53e4f', '#9e0142'];
-  private values = [500, 1000, 3000, 5000, 7000, 10000, 15000, 18000, 2000, 30000];
+  private colors = ['#31cc5a', '#309e4f', '#35774e', '#414554', '#8b444f', '#bf4046', '#f63538'];
+  private values = [500, 1000, 5000, 10000, 15000, 2000,];
 
   private root;
   private node;
@@ -430,7 +432,7 @@ export class TreemapComponent implements OnInit {
     const This = this;
 
     // Define the div for the tooltip
-    const div = d3.select('#my_dataviz').append('div')
+    this.toolTipDiv = d3.select('#my_dataviz').append('div')
       .attr('class', 'tooltip').style('visibility', 'hidden');
 
 
@@ -535,13 +537,16 @@ export class TreemapComponent implements OnInit {
         .attr('filter', '')
         .style('stroke', this.linesChildrenColor)
         .on('mouseover', function(d, i) {
-          /**
-           * //Custom  tooltip*/
-          div.transition().duration(200).style('visibility', 'visible');
 
-          div.html('Name: ' + i.data.name + '<br/>' + 'Value: ' + i.data.size)
-            .style('left', (d.pageX) + 'px')
-            .style('top', (d.pageY - 28) + 'px');
+          This.toolTipDiv.transition().duration(200).style('visibility', 'visible');
+
+          const headerTag = '<li><strong>PARENT:' + i.parent.data.name + '</strong></li>';
+          const bodyTag = '<li class="li-body" style="background:' + This.fillColorConverter(i.data.size) + '">Name: ' + i.data.name + '<br/>' + 'Value: ' + i.data.size + '</li>';
+          const list = '<ul class="tooltip-ul">' + headerTag + bodyTag + '</ul>';
+
+          This.toolTipDiv.html(list)
+            .style('left', (d.pageX < (This.chartWidth / 2) ? d.pageX + 50 : (d.pageX - 150)) + 'px')
+            .style('top', (d.pageY < (This.chartHeight / 2) ? d.pageY + 20 : (d.pageY - 100)) + 'px');
 
           this.parentNode.appendChild(this); // workaround for bringing elements to the front (ie z-index)
           d3.select(this)
@@ -550,7 +555,7 @@ export class TreemapComponent implements OnInit {
         })
         .on('mouseout', function(d: any) {
 
-          div.transition()
+          This.toolTipDiv.transition()
             .duration(500).style('visibility', 'hidden');
 
           d3.select(this)
@@ -569,35 +574,7 @@ export class TreemapComponent implements OnInit {
         .classed('background', true)
         // @ts-ignore
         .style('fill', (d) => {
-          /*  TODO IMPLEMENT COLOR CUSTOM RULES*/
-          /* private colors = ['#5e4fa2', '#3288bd', '#66c2a5', '#abdda4', '#e6f598', '#ffffbf', '#fee08b', '#fdae61', '#f46d43', '#d53e4f', '#9e0142'];
-           private values = [500, 1000, 3000, 5000, 7000, 10000, 15000, 18000, 2000, 30000];*/
-          /* console.log('VALUEE', this.values.slice(0, 1).pop());*/
-
-          if (d.value < 500) {
-            return '#5e4fa2';
-          } else if (d.value < 1000) {
-            return '#3288bd';
-          } else if (d.value < 3000) {
-            return '#66c2a5';
-          } else if (d.value < 5000) {
-            return '#abdda4';
-          } else if (d.value < 7000) {
-            return '#e6f598';
-          } else if (d.value < 10000) {
-            return '#ffffbf';
-          } else if (d.value < 15000) {
-            return '#fee08b';
-          } else if (d.value < 18000) {
-            return '#fdae61';
-          } else if (d.value < 20000) {
-            return '#f46d43';
-          } else if (d.value < 30000) {
-            return '#d53e4f';
-          } else {
-            return '#9e0142';
-          }
-
+          return This.fillColorConverter(d.value);
         })
         .attr('width', (d) => {
           return Math.max(0.01, d.x1 - d.x0);
@@ -635,9 +612,7 @@ export class TreemapComponent implements OnInit {
 
   drawLegend(): void {
 
-
     const legW = 80;
-
 
     const legend = d3.select('#legend')
       .append('svg:svg')
@@ -674,6 +649,28 @@ export class TreemapComponent implements OnInit {
       })
       .style('fill', 'black')
       .style('stroke', 'none');
+  }
+
+  fillColorConverter(value: number): string {
+
+    /*  TODO IMPLEMENT COLOR CUSTOM RULES*/
+    /*   private colors = ['#31cc5a', '#309e4f', '#35774e', '#414554', '#8b444f', '#bf4046', '#f63538'];
+       private values = [1000, 5000,  10000, 15000, 2000, 30000];*/
+    if (value < 500) {
+      return '#31cc5a';
+    } else if (value < 1000) {
+      return '#309e4f';
+    } else if (value < 5000) {
+      return '#35774e';
+    } else if (value < 10000) {
+      return '#414554';
+    } else if (value < 15000) {
+      return '#8b444f';
+    } else if (value < 20000) {
+      return '#bf4046';
+    } else {
+      return '#f63538';
+    }
   }
 
 
