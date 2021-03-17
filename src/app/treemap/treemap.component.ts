@@ -443,11 +443,20 @@ export class TreemapComponent implements OnInit {
       .paddingRight(4);
 
 
+    const zoom2 = d3.zoom()
+      .scaleExtent([1, 6])
+      .translateExtent([[0, 0], [this.chartWidth, this.chartHeight]])
+      .on('zoom', (e) => {
+        This.chart.attr('transform', e.transform);
+      });
+
     this.chart = d3.select('#my_dataviz')
       .append('svg:svg')
       .attr('width', this.chartWidth)
       .attr('height', this.chartHeight)
+      .call(zoom2)
       .append('svg:g');
+
 
     d3.json('https://gist.githubusercontent.com/mbostock/1093025/raw/b40b9fc5b53b40836ead8aa4b4a17d948b491126/flare.json').then(data => {
 
@@ -672,6 +681,5 @@ export class TreemapComponent implements OnInit {
       return '#f63538';
     }
   }
-
 
 }
